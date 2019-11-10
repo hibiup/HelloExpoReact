@@ -30,16 +30,56 @@ export default class App extends Component {
     this.state = {
       currentPage: 0,
       dataSource: ds.cloneWithRows([
-        'Item_1',
-        'Item_2',
-        'Item_3',
-        'Item_4',
-        'Item_5',
-        'Item_6',
-        'Item_7',
-        'Item_8',
-        'Item_9',
-        'Item_10'
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-01',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-02',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-03',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-04',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-05',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-06',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-07',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-08',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-09',
+          subTitle: 'Describe...'
+        },
+        {
+          image: require('./assets/images/pic-01.jpg'),
+          title: 'item-10',
+          subTitle: 'Describe...'
+        }
       ]),
       advertisements: [
         {
@@ -90,7 +130,11 @@ export default class App extends Component {
           Alert.alert('你单击了商品列表', null, null) 
         }>
         <View style={styles.productRow}>
-          <Text>{rowData}</Text>
+          <Image style={styles.productImage} source={rowData.image}/>
+          <View style={styles.productText}>
+            <Text style={styles.productTitle}>{rowData.title}</Text>
+            <Text style={styles.productSubTitle}>{rowData.subTitle}</Text>
+          </View>
         </View>
       </TouchableHighlight>
     )
@@ -220,11 +264,6 @@ const styles = StyleSheet.create({
   products: {
     flex: 1
   },
-  productRow: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   advertisementContent: {
     width: Dimensions.get('window').width,
     height: 180
@@ -239,5 +278,31 @@ const styles = StyleSheet.create({
   },
   circleSelected: {
     backgroundColor : 'white'
+  },
+  productRow: {
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  },
+  productImage: {
+    marginLeft: 10,
+    width: 40,
+    height: 40
+  },
+  productText: {    
+    flex:1,
+    flexDirection: 'column',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  productTitle: {
+    flex: 3,
+    fontSize: 16
+  },
+  productSubTitle: {
+    flex: 2,
+    fontSize: 14,
+    color: 'gray'
   }
 });
