@@ -69,77 +69,87 @@ export default class App extends Component {
     }, 2000)  // End setInterval()  间隔为 2s
   }
 
-  render() {
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-        <View className="Content" style={styles.container}>
-          <StatusBar 
-            backgroundColor={'blue'}   // iOS 上不生效
-            barStyle={'default'}
-            networkActivityIndicatorVisible={true}  // Android 上不生效
-          />
-          <View style={styles.searchbar}>
-            <TextInput style={styles.searchInput} placeholder='Search' />
-            <Button 
-              style={styles.searchButton} 
-              title='Search'
-              onPress={() => Alert.alert('Search something~!', null, null) } 
-            />
-          </View>
-          <View style={styles.advertisement}>
-            <ScrollView 
-              ref="scrollView"    // 该参数将生成名为 scrollView 的实例并加入 this.refs 数组。这样在代码中就可以 this.refs.scrollView 来获取该组件。
-              horizontal={true} 
-              showsHorizontalScrollIndicator={false} 
-              pagingEnabled={true}
-            >
-              <TouchableHighlight onPress={ () => Alert.alert("Advertisement_1", null, null) }>
-                <Text style={{
-                  width: Dimensions.get('window').width,
-                  height: 180,
-                  backgroundColor: 'gray'
-                }}>
-                  Advertisement_1
-                </Text>
-              </TouchableHighlight>
-              <TouchableHighlight onPress={ () => Alert.alert("Advertisement_2", null, null) }>
-                <Text style={{
-                  width: Dimensions.get('window').width,
-                  height: 180,
-                  backgroundColor: 'orange'
-                }}>
-                  Advertisement_2
-                </Text>
-              </TouchableHighlight>
-              <TouchableHighlight onPress={ () => Alert.alert("Advertisement_3", null, null) }>
-                <Text style={{
-                  width: Dimensions.get('window').width,
-                  height: 180,
-                  backgroundColor: 'yellow'
-                }}>
-                  Advertisement_3
-                </Text>
-              </TouchableHighlight>
-            </ScrollView>
-          </View>
-          <View style={styles.products}>
-            <ListView 
-              dataSource={this.state.dataSource}  // 数据源
-              renderRow={this._renderRow}         // 返回每一条数据的绘图
-            />
-          </View>
-        </View>
-      </SafeAreaView>
-    )
-  }
-
   _renderRow = (rowData, sectionID, rowID) => {
     return(
-      <TouchableHighlight onPress={ () => Alert.alert('你单击了商品列表', null, null)}>
+      <TouchableHighlight onPress={ () =>
+          Alert.alert('你单击了商品列表', null, null) 
+        }>
         <View style={styles.productRow}>
           <Text>{rowData}</Text>
         </View>
       </TouchableHighlight>
+    )
+  }
+
+  render() {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View className="Content" style={styles.container}>
+        <StatusBar 
+          backgroundColor={'blue'}   // iOS 上不生效
+          barStyle={'default'}
+          networkActivityIndicatorVisible={true}  // Android 上不生效
+        />
+        <View style={styles.searchbar}>
+          <TextInput style={styles.searchInput} placeholder='Search' />
+          <Button 
+            style={styles.searchButton} 
+            title='Search'
+            onPress={() => 
+              Alert.alert('Search something~!', null, null) 
+            } 
+          />
+        </View>
+        <View style={styles.advertisement}>
+          <ScrollView 
+            ref="scrollView"    // 该参数将生成名为 scrollView 的实例并加入 this.refs 数组。这样在代码中就可以 this.refs.scrollView 来获取该组件。
+            horizontal={true} 
+            showsHorizontalScrollIndicator={false} 
+            pagingEnabled={true}
+          >
+            <TouchableHighlight onPress={ () => 
+                Alert.alert("Advertisement_1", null, null) 
+              }>
+              <Text style={{
+                width: Dimensions.get('window').width,
+                height: 180,
+                backgroundColor: 'gray'
+              }}>
+                Advertisement_1
+              </Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={ () => 
+                Alert.alert("Advertisement_2", null, null) 
+              }>
+              <Text style={{
+                width: Dimensions.get('window').width,
+                height: 180,
+                backgroundColor: 'orange'
+              }}>
+                Advertisement_2
+              </Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={ () => 
+                Alert.alert("Advertisement_3", null, null) 
+              }>
+              <Text style={{
+                width: Dimensions.get('window').width,
+                height: 180,
+                backgroundColor: 'yellow'
+              }}>
+                Advertisement_3
+              </Text>
+            </TouchableHighlight>
+          </ScrollView>
+        </View>
+        <View style={styles.products}>
+          <ListView 
+            dataSource={this.state.dataSource}  // 数据源
+            renderRow={this._renderRow}         // 返回每一条数据的绘图
+          />
+        </View>
+      </View>
+      </SafeAreaView>
     )
   }
 }
@@ -148,7 +158,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : Platform.OS === "ios"? 20 : 0  // React Native 在 Android 上的绘图区域包括 System bar, 需要去除。
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0  // React Native 在 Android 上的绘图区域包括 System bar, 需要去除。
   },
   searchbar: {
     height: 40,
