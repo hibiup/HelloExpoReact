@@ -5,7 +5,8 @@ import {
   Platform,      // 获得平台信息
   StyleSheet, 
   View,
-  Text, 
+  Text,
+  Image,
   TextInput,
   Button, 
   ScrollView,
@@ -42,18 +43,16 @@ export default class App extends Component {
       ]),
       advertisements: [
         {
-          title: 'Advertisement_1',
-          backgroundColor: 'gray'
+          image: require('./assets/adv/advertisment-pic-01.jpg')  // require 载入本地资源。注意相对路径。
         },
         {
-          title: 'Advertisement_2',
-          backgroundColor: 'orange'
+          image: require('./assets/adv/advertisment-pic-02.jpg') // image: 'https://img13.360buyimg.com/cms/jfs/t4090/228/1399180862/217278/206073fe/5874e621Nc675c6d0.jpg'
         },
         {
-          title: 'Advertisement_3',
-          backgroundColor: 'yellow'
+          image: require('./assets/adv/advertisment-pic-03.jpg') 
         },
-      ]
+      ],
+      searchText: ''
     }
   }
 
@@ -79,7 +78,6 @@ export default class App extends Component {
       if (nextPage >= 3) {
         nextPage = 0
       }
-
       this.setState({currentPage: nextPage})
       const offSetX = nextPage * Dimensions.get('window').width
       this.refs.scrollView.scrollResponderScrollTo({x: offSetX, y : 0, animated: true})
@@ -99,6 +97,16 @@ export default class App extends Component {
   }
 
   render() {
+    // 翻页指示器个数（等于广告数量）
+    const advertisementCount = this.state.advertisements.length
+    // 翻页指示器（圆点）外观
+    const circleSize = 8
+    const circleMargin = 5
+    // 翻页指示器整体宽度
+    const indicatorWidth = (circleSize + circleMargin * 2) * advertisementCount
+    // 坐标左位置
+    const left = ( Dimensions.get('window').width - indicatorWidth)
+
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View className="Content" style={styles.container}>
@@ -108,13 +116,20 @@ export default class App extends Component {
           networkActivityIndicatorVisible={true}  // Android 上不生效
         />
         <View style={styles.searchbar}>
-          <TextInput style={styles.searchInput} placeholder='Search' />
+          <TextInput 
+            style={styles.searchInput}
+            placeholder='Search'
+            onChangeText = { (text) => {
+              this.setState( {searchText : text} )
+              console.log('Input: ' + text)
+            } }
+          />
           <Button 
-            style={styles.searchButton} 
+            style={styles.searchButton}
             title='Search'
-            onPress={() => 
-              Alert.alert('Search something~!', null, null) 
-            } 
+            onPress={ () =>
+              Alert.alert('Searching ' + this.state.searchText + '...', null, null) 
+            }
           />
         </View>
         <View style={styles.advertisement}>
@@ -122,27 +137,51 @@ export default class App extends Component {
             ref="scrollView"    // 该参数将生成名为 scrollView 的实例并加入 this.refs 数组。这样在代码中就可以 this.refs.scrollView 来获取该组件。
             horizontal={true} 
             showsHorizontalScrollIndicator={false} 
-            pagingEnabled={true}
-          >
+            pagingEnabled={true} >
             {
               this.state.advertisements.map( (advertisement, index) => {
-                return (
+                return(
                   <TouchableHighlight onPress={ () => 
                     Alert.alert("Advertisement_"+(index+1), null, null) 
                   }>
-                    <Text style={[
-                      styles.advertisementContent,
-                      {
-                        backgroundColor: advertisement.backgroundColor
-                      }
-                    ]}>
-                      advertisement.title
-                    </Text>
+                    <Image 
+                      style={ styles.advertisementContent } 
+                      source={ advertisement.image }
+                    />
                   </TouchableHighlight>
                 )
               } )
             }
           </ScrollView>
+          <View style={[  // 广告位指示器
+            styles.indicator,
+            { left: left }
+          ]} >
+            {
+              this.state.advertisements.map( (advertisement, index) => {
+                return(<View 
+                  key= {index} 
+                  style={ (index === this.state.currentPage)
+                    ? [
+                      styles.circleSelected,
+                      {
+                        borderRadius : circleSize/2,
+                        width : circleSize,
+                        height : circleSize,
+                        marginHorizontal : circleMargin
+                      }
+                    ] : [
+                      styles.circle,
+                      {
+                        borderRadius : circleSize/2,
+                        width : circleSize,
+                        height : circleSize,
+                        marginHorizontal : circleMargin
+                      }
+                    ] }/> )
+              } )
+            }
+          </View>
         </View>
         <View style={styles.products}>
           <ListView 
@@ -169,7 +208,8 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     borderColor: 'gray',
-    borderWidth: 2
+    borderWidth: 2,
+    borderRadius: 10
   },
   searchButton :{
     flex: 1
@@ -188,5 +228,16 @@ const styles = StyleSheet.create({
   advertisementContent: {
     width: Dimensions.get('window').width,
     height: 180
+  },
+  indicator: {
+    position : 'absolute',
+    top: 160,
+    flexDirection : 'row'
+  },
+  circle: {
+    backgroundColor :'gray'
+  },
+  circleSelected: {
+    backgroundColor : 'white'
   }
 });
