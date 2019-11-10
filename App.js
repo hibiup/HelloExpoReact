@@ -43,13 +43,13 @@ export default class App extends Component {
       ]),
       advertisements: [
         {
-          image: require('./assets/adv/advertisment-pic-01.jpg')  // require 载入本地资源。注意相对路径。
+          image: require('./assets/images/advertisment-pic-01.jpg')  // require 载入本地资源。注意相对路径。
         },
         {
-          image: require('./assets/adv/advertisment-pic-02.jpg') // image: 'https://img13.360buyimg.com/cms/jfs/t4090/228/1399180862/217278/206073fe/5874e621Nc675c6d0.jpg'
+          image: require('./assets/images/advertisment-pic-02.jpg') // image: 'https://img13.360buyimg.com/cms/jfs/t4090/228/1399180862/217278/206073fe/5874e621Nc675c6d0.jpg'
         },
         {
-          image: require('./assets/adv/advertisment-pic-03.jpg') 
+          image: require('./assets/images/advertisment-pic-03.jpg') 
         },
       ],
       searchText: ''
