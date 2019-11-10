@@ -6,6 +6,7 @@ import {
   StyleSheet, 
   View,
   Text,
+  RefreshControl,
   Image,
   TextInput,
   Button, 
@@ -29,6 +30,7 @@ export default class App extends Component {
 
     this.state = {
       currentPage: 0,
+      isRefreshing: false,
       dataSource: ds.cloneWithRows([
         {
           image: require('./assets/images/pic-01.jpg'),
@@ -140,6 +142,44 @@ export default class App extends Component {
     )
   }
 
+  _renderSeperator = (sectionID, rowID, adjacentRowHighlighted) => {
+    return (
+      <View key={`${sectionID}-${rowID}`} style={styles.divider} />
+      )
+  }
+
+  _renderRefreshControl() {
+    return(
+      <RefreshControl
+        refreshing={this.state.isRefreshing}
+        onRefresh={
+          // 调用刷新函数
+          this._onRefresh
+        }
+        tintColor={'#FF0000'}
+        title={'Is refresing data, please wait...'}
+        titleColor={'#0000FF'}
+      />
+    )
+  }
+
+  _onRefresh = () => {
+    // 刷新数据
+    this.setState({isRefreshing: true})
+    setTimeout(() => {
+      const newProduces = Array.from(new Array(10)).map((value, index) => ({
+        image: require('./assets/images/pic-02.jpg'),
+        title: 'New item-' + (index+1),
+        subTitle: 'New describe...'
+      }))
+
+      this.setState({
+        isRefreshing: false,
+        dataSource: ds.cloneWithRows(newProduces)
+      })
+    }, 2000) // 模拟两秒延迟
+  }
+
   render() {
     // 翻页指示器个数（等于广告数量）
     const advertisementCount = this.state.advertisements.length
@@ -231,6 +271,8 @@ export default class App extends Component {
           <ListView 
             dataSource={this.state.dataSource}  // 数据源
             renderRow={this._renderRow}         // 返回每一条数据的绘图
+            renderSeparator={this._renderSeperator}
+            refreshControl={this._renderRefreshControl()}
           />
         </View>
       </View>
@@ -304,5 +346,11 @@ const styles = StyleSheet.create({
     flex: 2,
     fontSize: 14,
     color: 'gray'
-  }
+  },
+  divider: {
+    height: 1,
+    width: Dimensions.get('window').width-5,
+    marginLeft: 5,
+    backgroundColor: 'lightgray'
+    }
 });
