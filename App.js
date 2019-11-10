@@ -19,6 +19,9 @@ const ds = new ListView.DataSource({
   rowHasChanged:(r1, r2) => r1 !== r2
 })
 
+/**
+ * 组件类的名称缺省为 App, `node_modules/expo/AppEntry.js` 缺省注册了该组件作为 root component.
+ */
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -36,7 +39,21 @@ export default class App extends Component {
         'Item_8',
         'Item_9',
         'Item_10'
-      ])
+      ]),
+      advertisements: [
+        {
+          title: 'Advertisement_1',
+          backgroundColor: 'gray'
+        },
+        {
+          title: 'Advertisement_2',
+          backgroundColor: 'orange'
+        },
+        {
+          title: 'Advertisement_3',
+          backgroundColor: 'yellow'
+        },
+      ]
     }
   }
 
@@ -107,39 +124,24 @@ export default class App extends Component {
             showsHorizontalScrollIndicator={false} 
             pagingEnabled={true}
           >
-            <TouchableHighlight onPress={ () => 
-                Alert.alert("Advertisement_1", null, null) 
-              }>
-              <Text style={{
-                width: Dimensions.get('window').width,
-                height: 180,
-                backgroundColor: 'gray'
-              }}>
-                Advertisement_1
-              </Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={ () => 
-                Alert.alert("Advertisement_2", null, null) 
-              }>
-              <Text style={{
-                width: Dimensions.get('window').width,
-                height: 180,
-                backgroundColor: 'orange'
-              }}>
-                Advertisement_2
-              </Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={ () => 
-                Alert.alert("Advertisement_3", null, null) 
-              }>
-              <Text style={{
-                width: Dimensions.get('window').width,
-                height: 180,
-                backgroundColor: 'yellow'
-              }}>
-                Advertisement_3
-              </Text>
-            </TouchableHighlight>
+            {
+              this.state.advertisements.map( (advertisement, index) => {
+                return (
+                  <TouchableHighlight onPress={ () => 
+                    Alert.alert("Advertisement_"+(index+1), null, null) 
+                  }>
+                    <Text style={[
+                      styles.advertisementContent,
+                      {
+                        backgroundColor: advertisement.backgroundColor
+                      }
+                    ]}>
+                      advertisement.title
+                    </Text>
+                  </TouchableHighlight>
+                )
+              } )
+            }
           </ScrollView>
         </View>
         <View style={styles.products}>
@@ -182,5 +184,9 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  advertisementContent: {
+    width: Dimensions.get('window').width,
+    height: 180
   }
 });
