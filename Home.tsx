@@ -13,6 +13,7 @@ import {
   ScrollView,
   Dimensions,         // 获得屏幕尺寸
   ListView,
+  FlatList,
   Alert,              // 对话框
   TouchableHighlight  // 可点击组件
 } from 'react-native'
@@ -25,6 +26,7 @@ const ds = new ListView.DataSource({
  * 组件类的名称缺省为 App, `node_modules/expo/AppEntry.js` 缺省注册了该组件作为 root component.
  */
 export default class Home extends Component {
+  // 当 Home 被创建的时候（参见 main.ios 和 main.android）, 参数会作为 props 数组传递进来。 
   constructor(props) {
     super(props)
 
@@ -34,7 +36,7 @@ export default class Home extends Component {
       dataSource: ds.cloneWithRows([
         {
           image: require('./assets/images/pic-01.jpg'),
-          title: 'item-01',
+          title: 'home-01',
           subTitle: 'Describe...'
         },
         {

@@ -6,14 +6,14 @@ import {
   Image
 } from 'react'
 
-import Home from './Home'
+import Main from './main'   // 自适应到 main.android 或 main.ios 文件
 import Detail from './Detail'
 import Help from './Help'
 
 const MainNavigator = createStackNavigator(
   {
     Home: {
-      screen: Home,
+      screen: Main,     // createStackNavigator 会将 `this`(MainNavigator) 作为 `navigation` 参数传递给 Main
       navigationOptions: {
         title: "首页面",
         tabBarLabel: "Home page",
@@ -51,6 +51,7 @@ const MainNavigator = createStackNavigator(
   }
 )
 
+// 通过 createAppContainer 来构建绑定了 Navigator (this.prop.navigation) 的 App:NavigationContainer 实例。
 const App = createAppContainer(MainNavigator);
 
 export default App
