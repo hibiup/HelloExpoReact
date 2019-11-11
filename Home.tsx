@@ -272,7 +272,7 @@ export default class Home extends Component {
           </View>
         </View>
         <View style={styles.products}>
-          <ListView 
+          <ListView
             dataSource={this.state.dataSource}  // 数据源
             renderRow={this._renderRow}         // 返回每一条数据的绘图
             renderSeparator={this._renderSeperator}

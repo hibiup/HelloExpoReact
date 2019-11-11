@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {
+    SafeAreaView,
     StyleSheet,
     View,
     Text,
@@ -14,7 +15,7 @@ export default class Chat extends Component {
 
     render() {
         return(
-            <View style={StyleSheet.container}>
+            <View className="Content" style={styles.container}>
                 <Text xtyle={StyleSheet.text}>
                 聊天页面
                 </Text>
