@@ -181,11 +181,7 @@ export default class Home extends Component {
       })
     }, 2000) // 模拟两秒延迟
   }
-
-  static navigationOptions = {
-    header: null   //首页面去掉导航栏
-  }
-
+  
   render() {
     // 翻页指示器个数（等于广告数量）
     const advertisementCount = this.state.advertisements.length
