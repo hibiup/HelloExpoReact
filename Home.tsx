@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import { 
   SafeAreaView, 
   StatusBar, 
@@ -15,7 +15,7 @@ import {
   ListView,
   Alert,              // 对话框
   TouchableHighlight  // 可点击组件
-} from 'react-native';
+} from 'react-native'
 
 const ds = new ListView.DataSource({
   rowHasChanged:(r1, r2) => r1 !== r2
@@ -24,7 +24,7 @@ const ds = new ListView.DataSource({
 /**
  * 组件类的名称缺省为 App, `node_modules/expo/AppEntry.js` 缺省注册了该组件作为 root component.
  */
-export default class App extends Component {
+export default class Home extends Component {
   constructor(props) {
     super(props)
 
@@ -127,9 +127,11 @@ export default class App extends Component {
   }
 
   _renderRow = (rowData, sectionID, rowID) => {
+    const {navigate} = this.props.navigation
+
     return(
       <TouchableHighlight onPress={ () =>
-          Alert.alert('你单击了商品列表', null, null) 
+          navigate("Detail")
         }>
         <View style={styles.productRow}>
           <Image style={styles.productImage} source={rowData.image}/>
@@ -178,6 +180,10 @@ export default class App extends Component {
         dataSource: ds.cloneWithRows(newProduces)
       })
     }, 2000) // 模拟两秒延迟
+  }
+
+  static navigationOptions = {
+    header: null   //首页面去掉导航栏
   }
 
   render() {
@@ -353,4 +359,4 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     backgroundColor: 'lightgray'
     }
-});
+})
