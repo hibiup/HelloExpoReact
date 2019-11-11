@@ -7,8 +7,7 @@ import {
 } from 'react'
 
 import Main from './main'   // 自适应到 main.android 或 main.ios 文件
-import Detail from './detail'
-import Help from './help'
+import Detail from './Detail'
 
 const MainNavigator = createStackNavigator(
   {
@@ -36,13 +35,6 @@ const MainNavigator = createStackNavigator(
             )
           }
         }
-      }
-    },
-    Help: {
-      screen: Help,
-      navigationOptions: {
-        title: "帮助",
-        tabBarLabel: "Help page"
       }
     }
   },

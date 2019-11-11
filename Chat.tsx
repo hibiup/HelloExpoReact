@@ -7,7 +7,7 @@ import {
     StatusBar
 } from 'react-native'
 
-export default class Help extends Component {
+export default class Chat extends Component {
     constructor(props) {
         super(props)
     }
@@ -16,7 +16,7 @@ export default class Help extends Component {
         return(
             <View style={StyleSheet.container}>
                 <Text xtyle={StyleSheet.text}>
-                帮助页面
+                聊天页面
                 </Text>
             </View>
         )

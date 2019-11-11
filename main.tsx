@@ -6,6 +6,9 @@ import {
 import Home from './Home'
 import Chat from './Chat'
 
+/**
+ * 如果既不是 iOS，也不是 Android 设备，则调用此 main
+ */
 export default class Main extends Component {
   constructor(props) {
     super(props)
