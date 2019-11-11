@@ -7,8 +7,8 @@ import {
 } from 'react'
 
 import Main from './main'   // 自适应到 main.android 或 main.ios 文件
-import Detail from './Detail'
-import Help from './Help'
+import Detail from './detail'
+import Help from './help'
 
 const MainNavigator = createStackNavigator(
   {
