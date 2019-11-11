@@ -131,7 +131,7 @@ export default class Home extends Component {
 
     return(
       <TouchableHighlight onPress={ () =>
-          navigate("Detail")
+          navigate("Detail", {data: rowData})
         }>
         <View style={styles.productRow}>
           <Image style={styles.productImage} source={rowData.image}/>
@@ -181,7 +181,7 @@ export default class Home extends Component {
       })
     }, 2000) // 模拟两秒延迟
   }
-  
+
   render() {
     // 翻页指示器个数（等于广告数量）
     const advertisementCount = this.state.advertisements.length

@@ -9,10 +9,12 @@ import {
 
 export default class Detail extends React.Component {
     render() {
+        const data = this.props.navigation.getParam('data', 'NO-TITLE')
+
         return(
             <View style={StyleSheet.container}>
                 <Text xtyle={StyleSheet.text}>
-                详情页面
+                详情页面: {data.title}
                 </Text>
             </View>
         )
