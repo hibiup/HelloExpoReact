@@ -1,13 +1,50 @@
-import React, {Component} from 'react'
+import React from 'react'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
+import Home from './Home'
+import Chat from './Chat'
+
+import IconWithBadge from "./IconWithBadge"
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+
+export default createBottomTabNavigator(
+  {
+    Home: Home,
+    Chat: Chat,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let IconComponent = Ionicons;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = 'ios-home'
+        }
+        else if (routeName === 'Chat') {
+          // Add badges to some icons.
+          IconComponent = IconWithBadge;
+          iconName = `ios-information-circle${focused ? '' : '-outline'}`
+        }
+
+        // You can return any component that you like here!
+        return <IconComponent name={iconName} size={25} color={tintColor} />
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: 'blue',
+      inactiveTintColor: 'gray',
+    },
+  }
+)
+
+/*
 import {
   StyleSheet,
   View,
   Text,
   ViewPagerAndroid
 } from 'react-native'
-
-import Home from './Home'
-import Chat from './Chat'
 
 export default class Main extends Component {
   // Main 会接收到来自 App 的 createStackNavigator 传递的 navigation 参数，然后将它继续传递给 Home
@@ -33,3 +70,4 @@ const styles = StyleSheet.create({
     flex : 1
   }
 })
+*/

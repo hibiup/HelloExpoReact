@@ -1,23 +1,39 @@
-import React, {Component} from 'react'
-import {
-  TabBarIOS
-} from 'react-native'
- 
+import React from 'react'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
 import Home from './Home'
 import Chat from './Chat'
 
-export default class Main extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedTab: 'HOME'
-    }
+import IconWithBadge from "./IconWithBadge"
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+
+export default createBottomTabNavigator(
+  {
+    Home: Home,
+    Chat: Chat,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let IconComponent = Ionicons;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = `ios-home`;
+        }
+        else if (routeName === 'Chat') {
+          // Add badges to some icons.
+          IconComponent = IconWithBadge;
+          iconName = `ios-information-circle${focused ? '' : '-outline'}`
+        }
+
+        // You can return any component that you like here!
+        return <IconComponent name={iconName} size={25} color={tintColor} />
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: 'green',
+      inactiveTintColor: 'gray',
+    },
   }
-  
-  // Main 将接收到来自 App 的 createStackNavigator 传递的 navigation 参数，然后将它继续传递给 Home
-  render() {
-    return (
-      <Home navigation={this.props.navigation} />
-    )
-  }
-}
+)

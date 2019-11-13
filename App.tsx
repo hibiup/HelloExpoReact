@@ -44,6 +44,6 @@ const MainNavigator = createStackNavigator(
 )
 
 // 通过 createAppContainer 来构建绑定了 Navigator (this.prop.navigation) 的 App:NavigationContainer 实例。
-const App = createAppContainer(MainNavigator);
+const App = createAppContainer(MainNavigator)
 
 export default App
