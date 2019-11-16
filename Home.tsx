@@ -1,26 +1,39 @@
 import React, {Component} from 'react'
-import { 
-  SafeAreaView, 
-  StatusBar, 
-  Platform,      // 获得平台信息
-  StyleSheet, 
-  View,
+import {
+  Container,
+  Header, 
+  Content, 
+  Button, 
+  Item, 
+  Icon, 
+  Input, 
+  StyleProvider,
+  ListItem,
   Text,
+  List,
+  Thumbnail
+} from 'native-base'
+import getTheme from './native-base-theme/components'
+import material from './native-base-theme/variables/material'
+
+/**
+ * 用于载入字体
+ * 
+ * Need exec：$ expo install expo-font
+ */
+import {AppLoading} from "expo"
+import * as Font from 'expo-font'
+
+import {
+  StyleSheet,
+  View,
   RefreshControl,
   Image,
-  TextInput,
-  Button, 
   ScrollView,
   Dimensions,         // 获得屏幕尺寸
-  ListView,
-  FlatList,
   Alert,              // 对话框
   TouchableHighlight  // 可点击组件
 } from 'react-native'
-
-const ds = new ListView.DataSource({
-  rowHasChanged:(r1, r2) => r1 !== r2
-})
 
 /**
  * 组件类的名称缺省为 App, `node_modules/expo/AppEntry.js` 缺省注册了该组件作为 root component.
@@ -31,9 +44,10 @@ export default class Home extends Component {
     super(props)
 
     this.state = {
+      isReady: false,
       currentPage: 0,
       isRefreshing: false,
-      dataSource: ds.cloneWithRows([
+      dataSource: [
         {
           image: require('./assets/images/pic-01.jpg'),
           title: 'home-01',
@@ -84,7 +98,7 @@ export default class Home extends Component {
           title: 'item-10',
           subTitle: 'Describe...'
         }
-      ]),
+      ],
       advertisements: [
         {
           image: require('./assets/images/advertisment-pic-01.jpg')  // require 载入本地资源。注意相对路径。
@@ -100,6 +114,7 @@ export default class Home extends Component {
     }
   }
 
+  
   /**
    * render 后执行
    * 
@@ -111,8 +126,16 @@ export default class Home extends Component {
 
   /**
    * render 前，constructor 后执行
+   * 
+   * async 关键字表示异步载入指定的字体（Native base 需要用到 Roboto 字体）
    */
-  componentWillUnmount() {
+  async componentWillMount() {
+    await Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
+    });
+    this.setState({ isReady: true });
+
     clearInterval(this.interval)
   }
 
@@ -128,7 +151,7 @@ export default class Home extends Component {
     }, 2000)  // End setInterval()  间隔为 2s
   }
 
-  _renderRow = (rowData, sectionID, rowID) => {
+  _old_renderRow = (rowData, sectionID, rowID) => {
     const {navigate} = this.props.navigation
 
     return(
@@ -143,6 +166,27 @@ export default class Home extends Component {
           </View>
         </View>
       </TouchableHighlight>
+    )
+  }
+
+  _renderRow = (product) => {
+    const {navigate} = this.props.navigation
+
+    return(
+      <ListItem Button
+        onPress={() => {
+          if (navigate) {
+            navigate("Detail", {data: product})
+          }
+        }}>
+          <Thumbnail style={styles.productImage}
+            square size={40}
+            source={product.image}/>
+          <View style={styles.productText}>
+            <Text style={styles.productTitle}>{product.title}</Text>
+            <Text style={styles.productSubTitle}>{product.subTitle}</Text>
+          </View>
+      </ListItem>
     )
   }
 
@@ -179,12 +223,19 @@ export default class Home extends Component {
 
       this.setState({
         isRefreshing: false,
-        dataSource: ds.cloneWithRows(newProduces)
+        dataSource: newProduces
       })
     }, 2000) // 模拟两秒延迟
   }
 
   render() {
+    /**
+     * 如果初始化没有结束，则显示 loading 页面(AppLoading 有 Expo 缺省提供)
+     */
+    if (!this.state.isReady) {
+      return <AppLoading />
+    }
+
     // 翻页指示器个数（等于广告数量）
     const advertisementCount = this.state.advertisements.length
     // 翻页指示器（圆点）外观
@@ -196,114 +247,94 @@ export default class Home extends Component {
     const left = ( Dimensions.get('window').width - indicatorWidth)
 
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <View className="Content" style={styles.container}>
-        <StatusBar 
-          backgroundColor={'blue'}   // iOS 上不生效
-          barStyle={'default'}
-          networkActivityIndicatorVisible={true}  // Android 上不生效
-        />
-        <View style={styles.searchbar}>
-          <TextInput 
-            style={styles.searchInput}
-            placeholder='Search'
-            onChangeText = { (text) => {
-              this.setState( {searchText : text} )
-              console.log('Input: ' + text)
-            } }
-          />
-          <Button 
-            style={styles.searchButton}
-            title='Search'
-            onPress={ () =>
-              Alert.alert('Searching ' + this.state.searchText + '...', null, null) 
-            }
-          />
-        </View>
-        <View style={styles.advertisement}>
-          <ScrollView 
-            ref="scrollView"    // 该参数将生成名为 scrollView 的实例并加入 this.refs 数组。这样在代码中就可以 this.refs.scrollView 来获取该组件。
-            horizontal={true} 
-            showsHorizontalScrollIndicator={false} 
-            pagingEnabled={true} >
-            {
-              this.state.advertisements.map( (advertisement, index) => {
-                return(
-                  <TouchableHighlight onPress={ () => 
-                    Alert.alert("Advertisement_"+(index+1), null, null) 
-                  }>
-                    <Image 
-                      style={ styles.advertisementContent } 
-                      source={ advertisement.image }
-                    />
-                  </TouchableHighlight>
-                )
-              } )
-            }
-          </ScrollView>
-          <View style={[  // 广告位指示器
-            styles.indicator,
-            { left: left }
-          ]} >
-            {
-              this.state.advertisements.map( (advertisement, index) => {
-                return(<View 
-                  key= {index} 
-                  style={ (index === this.state.currentPage)
-                    ? [
-                      styles.circleSelected,
-                      {
-                        borderRadius : circleSize/2,
-                        width : circleSize,
-                        height : circleSize,
-                        marginHorizontal : circleMargin
-                      }
-                    ] : [
-                      styles.circle,
-                      {
-                        borderRadius : circleSize/2,
-                        width : circleSize,
-                        height : circleSize,
-                        marginHorizontal : circleMargin
-                      }
-                    ] }/> )
-              } )
-            }
+      <StyleProvider style={getTheme(material)}>
+      <Container>
+        <Header searchBar rounded>
+          <Item>
+            <Icon name="ios-people" />
+            <Input placeholder='Search' 
+              onChangeText={ (text) => {
+                this.setState({searchText: text})
+                console.log('Input is: ' + this.state.searchText)
+              } }/>
+            <Button transparent
+              onPress={ () =>
+                Alert.alert('Search: ' + this.state.searchText, null, null)
+              }
+            >
+            <Icon name='ios-search' />
+            <Text>Search</Text>
+          </Button>
+          </Item>
+        </Header>
+        
+          <View style={styles.advertisement}>
+            <ScrollView 
+              ref="scrollView"    // 该参数将生成名为 scrollView 的实例并加入 this.refs 数组。这样在代码中就可以 this.refs.scrollView 来获取该组件。
+              horizontal={true} 
+              showsHorizontalScrollIndicator={false} 
+              pagingEnabled={true} >
+              {
+                this.state.advertisements.map( (advertisement, index) => {
+                  return(
+                    <TouchableHighlight onPress={ () => 
+                      Alert.alert("Advertisement_"+(index+1), null, null) 
+                    }>
+                      <Image 
+                        style={ styles.advertisementContent } 
+                        source={ advertisement.image }
+                      />
+                    </TouchableHighlight>
+                  )
+                } )
+              }
+            </ScrollView>
+            <View style={[  // 广告位指示器
+              styles.indicator,
+              { left: left }
+            ]} >
+              {
+                this.state.advertisements.map( (advertisement, index) => {
+                  return(<View 
+                    key= {index} 
+                    style={ (index === this.state.currentPage)
+                      ? [
+                        styles.circleSelected,
+                        {
+                          borderRadius : circleSize/2,
+                          width : circleSize,
+                          height : circleSize,
+                          marginHorizontal : circleMargin
+                        }
+                      ] : [
+                        styles.circle,
+                        {
+                          borderRadius : circleSize/2,
+                          width : circleSize,
+                          height : circleSize,
+                          marginHorizontal : circleMargin
+                        }
+                      ] }/> )
+                } )
+              }
+            </View>
           </View>
-        </View>
-        <View style={styles.products}>
-          <ListView
-            dataSource={this.state.dataSource}  // 数据源
-            renderRow={this._renderRow}         // 返回每一条数据的绘图
-            renderSeparator={this._renderSeperator}
-            refreshControl={this._renderRefreshControl()}
-          />
-        </View>
-      </View>
-      </SafeAreaView>
+          
+        <Content refreshControl={this._renderRefreshControl()} >
+          <View style={styles.products}>
+            <List
+              dataArray={this.state.dataSource}
+              renderRow={this._renderRow}
+              renderSeparator={this._renderSeperator} />
+          </View>
+        </Content>
+      </Container>
+      </StyleProvider>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0  // React Native 在 Android 上的绘图区域包括 System bar, 需要去除。
-  },
-  searchbar: {
-    height: 40,
-    flexDirection: 'row'
-  },
-  searchInput: {
-    flex: 1,
-    borderColor: 'gray',
-    borderWidth: 2,
-    borderRadius: 10
-  },
-  searchButton :{
-    flex: 1
-  },
   advertisement: {
     height: 180
   },
