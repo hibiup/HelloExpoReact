@@ -151,24 +151,6 @@ export default class Home extends Component {
     }, 2000)  // End setInterval()  间隔为 2s
   }
 
-  _old_renderRow = (rowData, sectionID, rowID) => {
-    const {navigate} = this.props.navigation
-
-    return(
-      <TouchableHighlight onPress={ () =>
-          navigate("Detail", {data: rowData})
-        }>
-        <View style={styles.productRow}>
-          <Image style={styles.productImage} source={rowData.image}/>
-          <View style={styles.productText}>
-            <Text style={styles.productTitle}>{rowData.title}</Text>
-            <Text style={styles.productSubTitle}>{rowData.subTitle}</Text>
-          </View>
-        </View>
-      </TouchableHighlight>
-    )
-  }
-
   _renderRow = (product) => {
     const {navigate} = this.props.navigation
 

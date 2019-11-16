@@ -23,17 +23,17 @@ export class IconWithNumericBadge extends Component {
                     <View
                         style={{
                             position: 'absolute',
-                            right: -6,
+                            right: -8,
                             top: -3,
                             backgroundColor: 'red',
-                            borderRadius: 6,
-                            width: (badgeCount>9)? 18: 14,
-                            height: 14,
+                            borderRadius: 10,
+                            width: (badgeCount>9)? 22: 18,
+                            height: 18,
                             justifyContent: 'center',
                             alignItems: 'center',
                         }} >
                         <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
-                            {(badgeCount>99)?'...': badgeCount}
+                            {(badgeCount>99)?'99+': badgeCount}
                         </Text>
                     </View>
                   )
@@ -49,7 +49,7 @@ export default class IconWithBadge extends Component {
 
         // You should pass down the badgeCount in some other ways like React Context API, Redux, MobX or event emitters.
         this.state = {
-            badgeCount: 100
+            badgeCount: 99
         }
     }
 

@@ -1,39 +1,61 @@
-import React from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import React, {Component} from 'react'
+import {Container, Content, Footer, FooterTab, Badge, Button, Icon, Text} from 'native-base'
 
 import Home from './Home'
 import Chat from './Chat'
 
-import IconWithBadge from "./IconWithBadge"
-import { createBottomTabNavigator } from 'react-navigation-tabs'
-
-export default createBottomTabNavigator(
-  {
-    Home: Home,
-    Chat: Chat,
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, horizontal, tintColor }) => {
-        const { routeName } = navigation.state;
-        let IconComponent = Ionicons;
-        let iconName;
-        if (routeName === 'Home') {
-          iconName = `ios-home`;
-        }
-        else if (routeName === 'Chat') {
-          // Add badges to some icons.
-          IconComponent = IconWithBadge;
-          iconName = `ios-information-circle${focused ? '' : '-outline'}`
-        }
-
-        // You can return any component that you like here!
-        return <IconComponent name={iconName} size={25} color={tintColor} />
-      },
-    }),
-    tabBarOptions: {
-      activeTintColor: 'green',
-      inactiveTintColor: 'gray',
-    },
+export default class Main extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      selectedTab: 'Home'
+    }
   }
-)
+
+  render () {
+    return(
+      <Container>
+        {this._renderContent() }
+
+        <Footer>
+          <FooterTab>
+            <Button active={this.state.selectedTab === 'Home'}
+              onPress={() => {
+                this.setState({ selectedTab: 'Home'})
+              }}>
+              <Icon name='ios-home' />
+              <Text>Home</Text>
+            </Button>
+            <Button active={this.state.selectedTab==='Chat'}
+              onPress={() => {
+                this.setState({selectedTab: 'Chat'})
+              }}>
+                <Icon name='ios-chatbubbles'/>
+                <Badge style={{ position: 'absolute', left: 110, top: 8 }}><Text>2</Text></Badge>
+              </Button>
+          </FooterTab>
+        </Footer>
+      </Container>
+    )
+  }
+
+  _renderContent() {
+    /**
+     * App 将 navigation 传递给 main, main 再传递给 Home 和 Chat（实际上 Home 和 Chat 共享相同的 Navigation 并不合理，实际应用中
+     * 可以定义多个 Navigation 分别传递给 Home 和 Chat。）
+     */
+    if(this.state.selectedTab === 'Home') {
+      return (
+        <Content>
+          <Home navigation={this.props.navigation} />
+        </Content>
+      )
+    } else if(this.state.selectedTab === 'Chat'){
+      return (
+        <Content>
+          <Chat navigation={this.props.navigation} />
+        </Content>
+      )
+    }
+  }
+}

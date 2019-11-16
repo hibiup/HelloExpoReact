@@ -24,7 +24,7 @@ export default createBottomTabNavigator(
         else if (routeName === 'Chat') {
           // Add badges to some icons.
           IconComponent = IconWithBadge;
-          iconName = `ios-information-circle${focused ? '' : '-outline'}`
+          iconName = `ios-chatbubbles${focused ? '' : ''}`
         }
 
         // You can return any component that you like here!

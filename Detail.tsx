@@ -8,7 +8,6 @@ import {
     Picker,
     Slider,
     Switch,
-    WebView
 } from 'react-native'
 
 export default class Detail extends React.Component {
