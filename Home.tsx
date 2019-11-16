@@ -13,6 +13,7 @@ import {
   List,
   Thumbnail
 } from 'native-base'
+
 import getTheme from './native-base-theme/components'
 import material from './native-base-theme/variables/material'
 
@@ -156,6 +157,7 @@ export default class Home extends Component {
 
     return(
       <ListItem Button
+        style={styles.productRow}
         onPress={() => {
           if (navigate) {
             navigate("Detail", {data: product})
@@ -303,12 +305,7 @@ export default class Home extends Component {
           </View>
           
         <Content refreshControl={this._renderRefreshControl()} >
-          <View style={styles.products}>
-            <List
-              dataArray={this.state.dataSource}
-              renderRow={this._renderRow}
-              renderSeparator={this._renderSeperator} />
-          </View>
+          {this.state.dataSource.map( (product) => this._renderRow(product) )}
         </Content>
       </Container>
       </StyleProvider>
@@ -339,28 +336,25 @@ const styles = StyleSheet.create({
     backgroundColor : 'white'
   },
   productRow: {
-    height: 60,
+    height: 80,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white'
   },
   productImage: {
     marginLeft: 10,
-    width: 40,
-    height: 40
   },
-  productText: {    
-    flex:1,
+  productText: {
     flexDirection: 'column',
-    marginTop: 10,
-    marginBottom: 10,
+    marginLeft: 10,
+    marginTop: 5
   },
   productTitle: {
-    flex: 3,
+    flex: 1,
     fontSize: 16
   },
   productSubTitle: {
-    flex: 2,
+    flex: 1,
     fontSize: 14,
     color: 'gray'
   },

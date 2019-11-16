@@ -46,15 +46,11 @@ export default class Main extends Component {
      */
     if(this.state.selectedTab === 'Home') {
       return (
-        <Content>
           <Home navigation={this.props.navigation} />
-        </Content>
       )
     } else if(this.state.selectedTab === 'Chat'){
       return (
-        <Content>
           <Chat navigation={this.props.navigation} />
-        </Content>
       )
     }
   }

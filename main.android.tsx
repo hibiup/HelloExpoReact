@@ -1,6 +1,9 @@
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
+import getTheme from './native-base-theme/components'
+import material from './native-base-theme/variables/material'
+
 import Home from './Home'
 import Chat from './Chat'
 
